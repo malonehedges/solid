@@ -4,6 +4,8 @@ pragma solidity ^0.8.15;
 import {ERC721} from "solmate/tokens/ERC721.sol";
 
 contract OwnedToken is ERC721 {
+    string _tokenURI;
+
     constructor(
         address owner,
         string memory name,
@@ -12,14 +14,20 @@ contract OwnedToken is ERC721 {
         _mint(owner, 1);
     }
 
-    function tokenURI(uint256)
+    function tokenURI(uint256 tokenId)
         public
         view
         virtual
         override
         returns (string memory)
     {
-        revert("unimplemented");
+        require(tokenId == 1, "invalid token id");
+        return _tokenURI;
+    }
+
+    function setTokenURI(string calldata tokenURI_) external {
+        require(_ownerOf[1] == msg.sender, "unauthorized");
+        _tokenURI = tokenURI_;
     }
 }
 
